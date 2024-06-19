@@ -135,7 +135,7 @@ class _CustomizedTrackballState extends State<CustomizedTrackball> {
 class ChartData {
   ChartData(this.x, this.y);
 
-  final dynamic x;
+  final DateTime x;
   final num y;
 }
 
