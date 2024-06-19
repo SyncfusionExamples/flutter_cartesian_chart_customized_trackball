@@ -39,7 +39,6 @@ class _CustomizedTrackballState extends State<CustomizedTrackball> {
   void initState() {
     isTransposed = false;
     chartData = [
-      ChartData(DateTime(2024, 2, 0), 31),
       ChartData(DateTime(2024, 2, 1), 21),
       ChartData(DateTime(2024, 2, 2), 34),
       ChartData(DateTime(2024, 2, 3), 30),
@@ -79,11 +78,13 @@ class _CustomizedTrackballState extends State<CustomizedTrackball> {
       body: Column(
         children: [
           Expanded(
-            flex: 8,
+            flex: 9,
             child: SfCartesianChart(
               isTransposed: isTransposed,
-              margin: const EdgeInsets.all(50),
-              primaryXAxis: DateTimeAxis(dateFormat: DateFormat.MEd()),
+              primaryXAxis: DateTimeAxis(
+                dateFormat: DateFormat.MEd(),
+                edgeLabelPlacement: EdgeLabelPlacement.shift,
+              ),
               trackballBehavior: _CustomTrackballBehavior(),
               series: <CartesianSeries<ChartData, DateTime>>[
                 SplineAreaSeries(
@@ -115,13 +116,14 @@ class _CustomizedTrackballState extends State<CustomizedTrackball> {
             ),
           ),
           Expanded(
+            flex: 1,
             child: TextButton(
               onPressed: () {
                 setState(() {
                   isTransposed = !isTransposed;
                 });
               },
-              child: const Text('Transposed'),
+              child: const Text('Transposed chart'),
             ),
           ),
         ],
@@ -154,7 +156,6 @@ class _CustomTrackballBehavior extends TrackballBehavior {
     final Rect plotAreaBounds = parentBox!.paintBounds;
     final Offset position =
         Offset(chartPointInfo[0].xPosition!, chartPointInfo[0].yPosition!);
-
     // Draws custom trackball line.
     _drawCustomTrackballLine(context, position, plotAreaBounds);
     // Draws custom trackball text.
@@ -164,14 +165,12 @@ class _CustomTrackballBehavior extends TrackballBehavior {
   void _drawCustomTrackballLine(
       PaintingContext context, Offset position, Rect plotAreaBounds) {
     if (lineType != TrackballLineType.none) {
-      double xPos = position.dx;
-      double yPos = position.dy;
       final Offset startPos = position;
       Offset endPos = Offset.zero;
       if (isTransposed) {
-        endPos = Offset(plotAreaBounds.left, yPos);
+        endPos = Offset(plotAreaBounds.left, position.dy);
       } else {
-        endPos = Offset(xPos, plotAreaBounds.bottom);
+        endPos = Offset(position.dx, plotAreaBounds.bottom);
       }
 
       final Paint fillPaint = Paint()
@@ -210,24 +209,19 @@ class _CustomTrackballBehavior extends TrackballBehavior {
 
     final String label = chartPointInfo[0].label!;
     final Size labelSize = measureText(label, textStyle);
-    final Offset textPos = _posWithInBounds(
-      isTransposed
-          ? position.translate((labelSize.height + 5), -((labelSize.width / 2)))
-          : position.translate(-(labelSize.width / 2),
-              -((labelSize.height + 10) + (labelSize.height / 2))),
-      label,
-      labelSize,
-      plotAreaBounds,
-    );
-
+    final Offset customPos = isTransposed
+        ? position.translate((labelSize.height + 5), -((labelSize.width / 2)))
+        : position.translate(-(labelSize.width / 2),
+            -((labelSize.height + 10) + (labelSize.height / 2)));
+    final Offset textPos =
+        _withInBounds(customPos, label, labelSize, plotAreaBounds);
     _drawText(context.canvas, label, textPos, textStyle);
   }
 
-  Offset _posWithInBounds(
+  Offset _withInBounds(
       Offset position, String label, Size labelSize, Rect plotAreaBounds) {
     double xPos = position.dx;
     double yPos = position.dy;
-
     const double padding = 5;
     if (xPos + labelSize.width > plotAreaBounds.right) {
       xPos = plotAreaBounds.right - padding - labelSize.width;
