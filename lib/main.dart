@@ -89,13 +89,11 @@ class _CustomizedTrackballState extends State<CustomizedTrackball> {
               series: <CartesianSeries<ChartData, DateTime>>[
                 SplineAreaSeries(
                   dataSource: chartData,
-                  xValueMapper: (ChartData sales, _) => sales.x,
-                  yValueMapper: (ChartData sales, _) => sales.y,
-                  borderWidth: 2,
+                  xValueMapper: (ChartData sales, int index) => sales.x,
+                  yValueMapper: (ChartData sales, int index) => sales.y,
                   borderColor: Colors.blue,
                   markerSettings: const MarkerSettings(
                     isVisible: true,
-                    borderWidth: 2,
                     borderColor: Colors.blue,
                   ),
                   gradient: LinearGradient(
