@@ -1,8 +1,8 @@
 # How to customize the trackball and its position in flutter SfCartesianChart 
 
-This repository contains a sample to implement the customize crosshair tooltip and its position on a [Syncfusion Flutter Chart](https://help.syncfusion.com/flutter/cartesian-charts/getting-started) widget.
+This repository contains a sample to implement the customize trackball tooltip and its position on a [Syncfusion Flutter Chart](https://help.syncfusion.com/flutter/cartesian-charts/getting-started) widget.
 
-Please refer the KB through this [link](https://support.syncfusion.com/agent/kb/16112).
+Please refer the KB through this [link](https://support.syncfusion.com/kb/article/16112/how-to-customize-the-trackball-and-its-position-in-flutter-sfcartesianchart).
 
 ## Syncfusion controls:
 
